@@ -8,8 +8,10 @@ export type Status = {
   adapter: string;
   installed: string;
   lastBeat: Beat | null;
-  nights: string[];
+  nights: NightSummary[];
 };
+
+export type NightSummary = { night: string; counts: StatusCounts };
 
 // Nights on disk = runs/<YYYY-MM-DD>.jsonl, newest first.
 export function nightsOnDisk(runsDir: string): string[] {
