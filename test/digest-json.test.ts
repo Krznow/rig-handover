@@ -16,7 +16,7 @@ describe('GET /api/digest/:night', () => {
   });
 
   it('404s for a night with no file and for a bad night', async () => {
-    for (const path of ['/api/digest/1999-01-01', '/api/digest/%2e%2e', '/api/digest/..']) {
+    for (const path of ['/api/digest/1999-01-01', '/api/digest/..%2fpackage', '/api/digest/..']) {
       const res = await createApp(config).request(path);
       expect(res.status).toBe(404);
       if (!path.endsWith('/..')) expect(await res.json()).toEqual({ error: 'no such night' }); // '..' is folded away by URL parsing and never reaches the route
