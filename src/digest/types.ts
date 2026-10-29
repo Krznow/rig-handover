@@ -30,9 +30,10 @@ export type Night = {
   night: string; // YYYY-MM-DD, the file name without `.jsonl`
   rows: DigestRow[];
   badLines: number; // lines that did not parse or did not fit RunLine; counted, never thrown
+  counts: StatusCounts; // parsed lines per status: what ran ok, retried and failed that night
 };
 
-// Per-night counts of each job's last status, for the board.
+// Counts per status: `Night.counts` is per line; `countStatuses(rows)` is per job's last status.
 export type StatusCounts = Record<RunStatus, number>;
 
 // readNight(runsDir, night): reads `<runsDir>/<night>.jsonl`.

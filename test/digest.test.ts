@@ -10,6 +10,7 @@ describe('readNight', () => {
   it('reads 2026-10-28 into 5 jobs and 1 bad line, sorted by job', () => {
     expect(night).not.toBeNull();
     expect(night!.badLines).toBe(1);
+    expect(night!.counts).toEqual({ ok: 10, retry: 4, fail: 1 });
     expect(night!.rows.map((r) => r.job)).toEqual([
       'digest/render',
       'fixtures/refresh',
@@ -47,12 +48,12 @@ describe('readNight', () => {
   it('gives zero rows for an empty file', () => {
     const dir = mkdtempSync(join(tmpdir(), 'rig-digest-'));
     writeFileSync(join(dir, '2026-01-01.jsonl'), '');
-    expect(readNight(dir, '2026-01-01')).toEqual({ night: '2026-01-01', rows: [], badLines: 0 });
+    expect(readNight(dir, '2026-01-01')).toEqual({ night: '2026-01-01', rows: [], badLines: 0, counts: { ok: 0, retry: 0, fail: 0 } });
   });
 
   it('counts lines that parse but do not fit as bad', () => {
     const text = ['[1]', '{"at":"x","job":"a","status":"maybe","owner":null}', '{"at":"x","job":"a","status":"ok","owner":3}', 'null'].join('\n');
-    expect(digestText('n', text)).toEqual({ night: 'n', rows: [], badLines: 4 });
+    expect(digestText('n', text)).toEqual({ night: 'n', rows: [], badLines: 4, counts: { ok: 0, retry: 0, fail: 0 } });
   });
 });
 
